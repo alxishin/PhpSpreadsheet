@@ -422,7 +422,11 @@ class Cell implements Stringable
                 $selected = $thisworksheet->getSelectedCells();
                 $title = $thisworksheet->getTitle();
                 $calculation = Calculation::getInstance($thisworksheet->getParent());
-                $result = $calculation->calculateCellValue($this, $resetLog);
+                try {
+                    $result = $calculation->calculateCellValue($this, $resetLog);
+                } catch (\Throwable) {
+                    $result = null;
+                }
                 $result = $this->convertDateTimeInt($result);
                 $thisworksheet->setSelectedCells($selected);
                 $thisworksheet->getParentOrThrow()->setActiveSheetIndex($index);
